@@ -38,6 +38,12 @@ func _ready():
 	var submenu2 = create_submenu($Node/RadialMenu)
 	var submenu3 = create_submenu($Node/RadialMenu)
 	var submenu4 = create_submenu($Node/RadialMenu)
+	
+	var submenu5 = create_submenu(submenu4)
+	submenu4.add_icon_item(SCALE_TEXTURE, "Something else", submenu5)
+	
+	var submenu6 = create_submenu(submenu5)
+	submenu5.add_icon_item(POINTS_TEXTURE, "Another", submenu6)
 
 	# Define the main menu's items.
 	$Node/RadialMenu.menu_items = [
@@ -56,6 +62,10 @@ func _input(event):
 			var m = get_local_mouse_position()
 			$Node/RadialMenu.open_menu(m)
 			get_viewport().set_input_as_handled()
+	if Input.is_action_just_pressed("ui_cancel"):
+		var m = get_window().size / 2
+		$Node/RadialMenu.open_menu(m)
+		get_viewport().set_input_as_handled()
 
 
 func _on_ArcPopupMenu_item_selected(action, _position):

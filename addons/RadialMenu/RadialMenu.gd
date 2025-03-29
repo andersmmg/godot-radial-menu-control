@@ -220,6 +220,7 @@ func _radial_input(event):
 		redraw_if_submenu_selection_changed()
 	elif event is InputEventJoypadMotion:
 		set_selected_item(get_selected_by_joypad())
+		redraw_if_submenu_selection_changed()
 		return
 
 	if has_open_submenu():
@@ -337,7 +338,8 @@ func _draw_center():
 	if not is_submenu and center_radius > 0:
 		_draw_center_ring()
 
-	if show_titles and (not has_open_submenu() or get_open_submenu().selected == -1):
+	if show_titles and (not has_open_submenu() or get_open_submenu().selected == -1)\
+		and not state == MenuState.closing:
 		_draw_label()
 
 
