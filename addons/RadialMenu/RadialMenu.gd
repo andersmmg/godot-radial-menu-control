@@ -70,7 +70,8 @@ enum Position { off, inside, outside }
 @export var icon_scale := 1.0: set = _set_icon_scale
 ## Whether to display the item title in the center of the menu when one is selected
 @export var show_titles := true: set = _set_titles_display
-
+## Whether submenus should always inherit the theme
+@export var submenu_inherit_theme := true
 
 # default menu items. They are provided so a placeholder radial menu can be displayed in the editor
 # even before it is configured via code.
@@ -746,6 +747,8 @@ func open_submenu(submenu, idx):
 	submenu.center_radius = center_radius  # submenu needs this to determine whether to draw labels
 	submenu.is_submenu = true
 	submenu.position = moved_to_position - submenu.center_offset
+	if submenu_inherit_theme:
+		submenu.theme = theme
 
 	get_parent().add_child(submenu)
 	_connect_submenu_signals(submenu)
