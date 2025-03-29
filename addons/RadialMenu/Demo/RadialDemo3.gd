@@ -46,13 +46,13 @@ func _ready():
 	submenu5.add_icon_item(POINTS_TEXTURE, "Another", submenu6)
 
 	# Define the main menu's items.
-	$Node/RadialMenu.menu_items = [
+	$Node/RadialMenu.set_items([
 		{'texture': SCALE_TEXTURE, 'title': "Reset scale", 'id': "action1"},
 		{'texture': TWODEE_TEXTURE, 'title': "Axis Setup", 'id': submenu1},
 		{'texture': POINTS_TEXTURE, 'title': "Dataset Setup", 'id': submenu2},
 		{'texture': GRID_TEXTURE, 'title': "Grid Setup", 'id': submenu3},
 		{'texture': TOOL_TEXTURE, 'title': "Advanced Tools", 'id': submenu4},
-	]
+	])
 
 
 func _input(event):
