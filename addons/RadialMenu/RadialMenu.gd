@@ -120,14 +120,14 @@ const Draw = preload("drawing_library.gd")
 ## The menu items to display.[br]
 ## Each entry must contain a [b]title[/b], [b]texture[/b], and an [b]id[/b], which can be
 ## pretty much any Variant, but can be a [RadialMenu] if it will have a submenu.
-var menu_items: Array = [
-	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 1", "id": "arc_id1"},
-	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 2", "id": "arc_id2"},
-	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 3", "id": "arc_id3"},
-	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 4", "id": "arc_id4"},
-	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 5", "id": "arc_id5"},
-	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 6", "id": "arc_id6"},
-	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 7", "id": "arc_id7"},
+var menu_items: Array[RadialMenuItem] = [
+	RadialMenuItem.create(_get_texture("DefaultPlaceholder"), "Item 1", "arc_id1"),
+	RadialMenuItem.create(_get_texture("DefaultPlaceholder"), "Item 2", "arc_id2"),
+	RadialMenuItem.create(_get_texture("DefaultPlaceholder"), "Item 3", "arc_id3"),
+	RadialMenuItem.create(_get_texture("DefaultPlaceholder"), "Item 4", "arc_id4"),
+	RadialMenuItem.create(_get_texture("DefaultPlaceholder"), "Item 5", "arc_id5"),
+	RadialMenuItem.create(_get_texture("DefaultPlaceholder"), "Item 6", "arc_id6"),
+	RadialMenuItem.create(_get_texture("DefaultPlaceholder"), "Item 7", "arc_id7"),
 ]:
 	set = set_items
 
@@ -292,7 +292,7 @@ func _draw() -> void:
 ## keys 'texture', 'title' and 'id'.[br]
 ## The value for the id can be anything you wish. If it is a RadialMenu,
 ## it will be treated as a submenu.
-func set_items(items: Array) -> void:
+func set_items(items: Array[RadialMenuItem]) -> void:
 	_clear_items()
 	menu_items = items
 	_create_item_icons()
@@ -305,7 +305,7 @@ func set_items(items: Array) -> void:
 ## If [param id] is a [RadialMenu] object, it will be treated as
 ## a submenu.
 func add_icon_item(texture: Texture2D, title: String, id: Variant) -> void:
-	var entry = {"texture": texture, "title": title, "id": id}
+	var entry = RadialMenuItem.create(texture, title, id)
 	menu_items.push_back(entry)
 	_create_item_icons()
 	if visible:
@@ -646,7 +646,7 @@ func _draw_label() -> void:
 	var text: String
 	if selected == -1:
 		return
-	text = menu_items[selected]["title"]
+	text = menu_items[selected].title
 	var font := _get_font("TitleFont")
 	var fontsize := _get_fontsize("TitleFont")
 	var color := _get_color("TitleDisplay")
@@ -737,7 +737,9 @@ func _has_open_submenu() -> bool:
 # Returns the submenu node if one is open, or null
 func _get_open_submenu() -> RadialMenu:
 	if active_submenu_idx != -1:
-		return menu_items[active_submenu_idx].id
+		if menu_items[active_submenu_idx].id is RadialMenu:
+			return menu_items[active_submenu_idx].id
+		return null
 	else:
 		return null
 
@@ -772,7 +774,7 @@ func _select_prev() -> void:
 # Opens a submenu or closes the menu and signals an id, depending on what
 # was selected
 func _activate_selected() -> void:
-	if selected != -1 and menu_items[selected].id is Control:
+	if selected != -1 and menu_items[selected].id is RadialMenu:
 		open_submenu(menu_items[selected].id, selected)
 	else:
 		close_menu()
@@ -814,25 +816,25 @@ func _create_item_icons() -> void:
 	if not _is_ready:
 		return
 	_clear_item_icons()
-	var n = menu_items.size()
+	var n := menu_items.size()
 	if n == 0:
 		return
-	var start_angle = center_angle - _item_angle * (n >> 1)
-	var half_angle
+	var start_angle := center_angle - _item_angle * (n >> 1)
+	var half_angle: float
 	if n % 2 == 0:
 		half_angle = _item_angle / 2.0
 	else:
 		half_angle = 0
 
-	var r = _get_icon_radius()
+	var r := _get_icon_radius()
 
-	var coords = Draw.calc_ring_segment_centers(
+	var coords := Draw.calc_ring_segment_centers(
 		r, n, start_angle + half_angle, start_angle + half_angle + n * _item_angle, _center_offset
 	)
 	for i in range(n):
-		var item = menu_items[i]
+		var item := menu_items[i]
 		if item != null:
-			var sprite = Sprite2D.new()
+			var sprite := Sprite2D.new()
 			sprite.position = coords[i]
 			sprite.centered = true
 			sprite.texture = item.texture
@@ -846,9 +848,9 @@ func _update_item_icons() -> void:
 	if not _item_children_present:
 		_create_item_icons()
 		return
-	var r = _get_icon_radius()
-	var n = menu_items.size()
-	var start_angle = center_angle - _item_angle * n * 0.5 + _item_angle * 0.5
+	var r := _get_icon_radius()
+	var n := menu_items.size()
+	var start_angle := center_angle - _item_angle * n * 0.5 + _item_angle * 0.5
 
 	# a heuristic - hide icons when they tend to outgrow their segment
 	if _item_angle < 0.01 or r * (_item_angle / 2 * PI) < width * icon_scale:
@@ -856,16 +858,16 @@ func _update_item_icons() -> void:
 	else:
 		$ItemIcons.show()
 
-	var coords = Draw.calc_ring_segment_centers(
+	var coords := Draw.calc_ring_segment_centers(
 		r, n, start_angle, start_angle + n * _item_angle, _center_offset
 	)
-	var i = 0
-	var ni = 0
-	var item_nodes = $ItemIcons.get_children()
+	var i: int = 0
+	var ni: int = 0
+	var item_nodes := $ItemIcons.get_children()
 	while i < n:
 		var item = menu_items[i]
 		if item != null:
-			var sprite = item_nodes[ni]
+			var sprite: Sprite2D = item_nodes[ni]
 			ni += 1
 			sprite.position = coords[i]
 			sprite.scale = Vector2(icon_scale, icon_scale)
@@ -876,14 +878,14 @@ func _update_item_icons() -> void:
 # Returns the inner and outer radius of the item ring (without selector
 # and decorator)
 func _get_inner_outer() -> Vector2:
-	var inner
-	var outer
-	var drw = 0
+	var inner: int
+	var outer: int
+	var drw: int = 0
 	if decorator_ring_position == Position.OUTSIDE:
 		drw = _get_constant("DecoratorRingWidth")
 
 	if selector_position == Position.OUTSIDE:
-		var w = max(drw, _get_constant("SelectorSegmentWidth"))
+		var w: int = maxi(drw, _get_constant("SelectorSegmentWidth"))
 		inner = radius - w - width
 		outer = radius - w
 	else:
@@ -894,13 +896,13 @@ func _get_inner_outer() -> Vector2:
 
 # Returns the total width of the ring (with decorator and selector)
 func _get_total_ring_width() -> int:
-	var dw = _get_constant("DecoratorRingWidth")
-	var sw = _get_constant("SelectorSegmentWidth")
+	var dw := _get_constant("DecoratorRingWidth")
+	var sw := _get_constant("SelectorSegmentWidth")
 	if decorator_ring_position == selector_position:
 		if decorator_ring_position == Position.OFF:
 			return width
 		else:
-			return width + max(sw, dw)
+			return width + maxi(sw, dw)
 	elif decorator_ring_position == Position.OFF:
 		return width + sw
 	elif selector_position == Position.OFF:
@@ -911,17 +913,17 @@ func _get_total_ring_width() -> int:
 
 # Gets the radius at which the item icons are centered
 func _get_icon_radius() -> float:
-	var so_width = 0
-	var dr_width = 0
+	var so_width: int = 0
+	var dr_width: int = 0
 	if selector_position == Position.OUTSIDE:
 		so_width = _get_constant("SelectorSegmentWidth")
 	if decorator_ring_position == Position.OUTSIDE:
 		dr_width = _get_constant("DecoratorRingWidth")
-	return radius - width / 2.0 - max(so_width, dr_width)
+	return radius - width / 2.0 - maxf(so_width, dr_width)
 
 
 # Gets theme color (or takes it from default theme)
-func _get_color(name) -> Color:
+func _get_color(name: String) -> Color:
 	if has_theme_color(name, "RadialMenu"):
 		return get_theme_color(name, "RadialMenu")
 	else:
@@ -929,7 +931,7 @@ func _get_color(name) -> Color:
 
 
 # Gets theme constant (or takes it from default theme)
-func _get_constant(name) -> int:
+func _get_constant(name: String) -> int:
 	if has_theme_constant(name, "RadialMenu"):
 		return get_theme_constant(name, "RadialMenu")
 	else:
@@ -937,7 +939,7 @@ func _get_constant(name) -> int:
 
 
 # Gets theme font (or takes it from default theme)
-func _get_font(name) -> Font:
+func _get_font(name: String) -> Font:
 	if has_theme_font(name, "RadialMenu"):
 		return get_theme_font(name, "RadialMenu")
 	else:
@@ -945,7 +947,7 @@ func _get_font(name) -> Font:
 
 
 # Gets theme font size (or takes it from default theme)
-func _get_fontsize(name) -> int:
+func _get_fontsize(name: String) -> int:
 	if has_theme_font_size(name, "RadialMenu"):
 		return get_theme_font_size(name, "RadialMenu")
 	else:
@@ -953,7 +955,7 @@ func _get_fontsize(name) -> int:
 
 
 # Gets theme texture (or takes it from default theme)
-func _get_texture(name) -> Texture2D:
+func _get_texture(name: String) -> Texture2D:
 	if has_theme_icon(name, "RadialMenu"):
 		return get_theme_icon(name, "RadialMenu")
 	else:
@@ -970,7 +972,7 @@ func _clear_items() -> void:
 		node.queue_free()
 
 
-func _set_tween(property, final_value) -> void:
+func _set_tween(property: NodePath, final_value: Variant) -> void:
 	_tween = create_tween()
 	_tween.connect("finished", Callable(self, "_on_Tween_tween_all_completed"))
 	_tween.set_trans(Tween.TRANS_SINE)
@@ -982,18 +984,18 @@ func _set_tween(property, final_value) -> void:
 # this will return the index of the menu item that lies along that
 # vector.
 func _get_itemindex_from_vector(v: Vector2) -> int:
-	var n = menu_items.size()
-	var start_angle = center_angle - _item_angle * n / 2.0
-	var end_angle = start_angle + n * _item_angle
+	var n := menu_items.size()
+	var start_angle := center_angle - _item_angle * n / 2.0
+	var end_angle := start_angle + n * _item_angle
 
-	var angle = v.angle_to(Vector2(cos(start_angle), sin(start_angle)))
+	var angle := v.angle_to(Vector2(cos(start_angle), sin(start_angle)))
 	if angle < 0:
 		angle = -angle
 	else:
 		angle = 2 * PI - angle
-	var section = end_angle - start_angle  # wrap around bug?
+	var section := end_angle - start_angle  # wrap around bug?
 
-	var idx = int(fmod(angle / section, n) * n)
+	var idx := int(fmod(angle / section, n) * n)
 	if idx >= n:
 		return -1
 	else:
@@ -1038,7 +1040,8 @@ func _on_Tween_tween_all_completed() -> void:
 	elif state == MenuState.MOVING:
 		state = MenuState.OPEN
 		moved_to_position = position + _center_offset
-		menu_items[active_submenu_idx].id.open_menu(moved_to_position)
+		if menu_items[active_submenu_idx].id is RadialMenu:
+			(menu_items[active_submenu_idx].id as RadialMenu).open_menu(moved_to_position)
 
 
 # Emits either an 'item_selected' or 'canceled' signal
@@ -1096,3 +1099,15 @@ func _on_submenu_cancelled() -> void:
 		get_viewport().set_input_as_handled()
 	active_submenu_idx = -1
 	queue_redraw()
+
+class RadialMenuItem:
+	var texture: Texture2D
+	var title: String
+	var id: Variant
+	
+	static func create(texture: Texture2D, title: String, id: Variant) -> RadialMenuItem:
+		var new_item := RadialMenuItem.new()
+		new_item.texture = texture
+		new_item.title = title
+		new_item.id = id
+		return new_item

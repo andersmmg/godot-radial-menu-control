@@ -12,7 +12,7 @@ const TOOL_TEXTURE = preload("icons/Tools.svg")
 func _ready():
 	# This is inefficient - it would be better to set the all the items
 	# at once using set_items...
-	$RadialMenu.set_items([])
+	$RadialMenu.clear_items()
 	$RadialMenu.add_icon_item(TWODEE_TEXTURE, "2D", 1)
 	$RadialMenu.add_icon_item(POINTS_TEXTURE, "Points", 2)
 	$RadialMenu.add_icon_item(GRID_TEXTURE, "Grid", 3)

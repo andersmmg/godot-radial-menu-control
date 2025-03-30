@@ -49,12 +49,12 @@ func _ready():
 		$Node/RadialMenu
 		. set_items(
 			[
-				{"texture": SCALE_TEXTURE, "title": "Reset scale", "id": "action1"},
-				{"texture": TWODEE_TEXTURE, "title": "Axis Setup", "id": submenu1},
-				{"texture": POINTS_TEXTURE, "title": "Dataset Setup", "id": submenu2},
-				{"texture": GRID_TEXTURE, "title": "Grid Setup", "id": submenu3},
-				{"texture": TOOL_TEXTURE, "title": "Advanced Tools", "id": submenu4},
-			]
+				RadialMenu.RadialMenuItem.create(SCALE_TEXTURE, "Reset Scale", "action1"),
+				RadialMenu.RadialMenuItem.create(TWODEE_TEXTURE, "Axis Setup", "submenu1"),
+				RadialMenu.RadialMenuItem.create(POINTS_TEXTURE, "Dataset Setup", "submenu2"),
+				RadialMenu.RadialMenuItem.create(GRID_TEXTURE, "Grid Setup", "submenu3"),
+				RadialMenu.RadialMenuItem.create(TOOL_TEXTURE, "Advanced Tools", "submenu4"),
+			] as Array[RadialMenu.RadialMenuItem]
 		)
 	)
 
