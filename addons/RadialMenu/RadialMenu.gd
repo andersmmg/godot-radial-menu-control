@@ -60,51 +60,66 @@ const ITEM_ICONS_NAME = "ItemIcons"
 
 const Draw = preload("drawing_library.gd")
 
-## Defines the radius of the ring
+## The radius of the menu ring
 @export var radius := 150:
 	set = _set_radius
-## Defines the menu ring width
+
+## The width of the ring that holds the menu items
 @export var width := 50:
 	set = _set_width
-## The radius of the center circle
+
+## The radius of the center ring.[br]Set to 0 to not draw the center ring.
 @export var center_radius := 20:
 	set = _set_center_radius
+
 ## The gap between items in the menu
 @export_range(0, 30, 0.5) var gap_size := 3.0:
 	set = _set_gap_size
+
 ## Where the ring selector should be placed on the menu
 @export var selector_position: Position = Position.INSIDE:
 	set = _set_selector_position
+
 ## Where the ring decorators should be placed on the menu
 @export var decorator_ring_position: Position = Position.INSIDE:
 	set = _set_decorator_ring_position
+
 ## The percentage of a full circle that will be covered by the ring
 @export_range(0.1, 1.0, 0.05) var circle_coverage := 0.65:
 	set = _set_circle_coverage
-## The angle where the center of the ring segment will be (if circle_coverage is less than 1) in radians
+
+## The angle where the center of the ring segment will be (if circle_coverage is less than 1.0) 
+## in radians
 @export_range(0.0, 2 * PI, 0.01745) var center_angle := -PI / 2:
 	set = _set_center_angle
+
 ## Make sure that if you set this to true, you provide a way to turn it off for the user, as this may
 ## slow down frequent users of your software.
 @export var show_animation := false
 
 ## Animation speed, higher is slower
 @export_range(0.01, 1.0, 0.01) var animation_speed_factor := 0.2
+
 ## This defines how far outside the ring the mouse will still select a ring segment, as a
 ## as a multiplication factor of the radius.
 @export_range(0, 10, 0.5) var outside_selection_factor := 3.0
+
 ## Scales the icons by this factor
 @export var icon_scale := 1.0:
 	set = _set_icon_scale
+
 ## Whether to display the item title in the center of the menu when one is selected
 @export var show_titles := true:
 	set = _set_titles_display
+
 ## Whether submenus should always inherit the theme
 @export var submenu_inherit_theme := true
 
 # default menu items. They are provided so a placeholder radial menu can be displayed in the editor
 # even before it is configured via code.
-## The menu items to display
+## The menu items to display.[br]
+## Each entry must contain a [b]title[/b], [b]texture[/b], and an [b]id[/b], which can be
+## pretty much any Variant, but can be a [RadialMenu] if it will have a submenu.
 var menu_items: Array = [
 	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 1", "id": "arc_id1"},
 	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 2", "id": "arc_id2"},
@@ -115,9 +130,6 @@ var menu_items: Array = [
 	{"texture": _get_texture("DefaultPlaceholder"), "title": "Item 7", "id": "arc_id7"},
 ]:
 	set = set_items
-
-# The following is internal state and should not be changed or accessed directly from outside the
-# object, as it is subject to change without warning.
 
 # for gamepad input. Use setup_gamepad to change these values.
 ## The gamepad device index
