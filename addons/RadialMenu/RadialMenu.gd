@@ -105,8 +105,8 @@ const Draw = preload("drawing_library.gd")
 @export_range(0, 10, 0.5) var outside_selection_factor := 3.0
 
 ## Scales the icons by this factor
-@export var icon_scale := 1.0:
-	set = _set_icon_scale
+@export var max_icon_size := Vector2(32, 32):
+	set = _set_max_icon_size
 
 ## Whether to display the item title in the center of the menu when one is selected
 @export var show_titles := true:
@@ -455,8 +455,8 @@ func _set_selector_position(new_position: Position) -> void:
 	queue_redraw()
 
 
-func _set_icon_scale(new_scale: float) -> void:
-	icon_scale = new_scale
+func _set_max_icon_size(new_max_icon_size: Vector2) -> void:
+	max_icon_size = new_max_icon_size
 	_update_item_icons()
 	queue_redraw()
 
@@ -812,6 +812,15 @@ func _register_menu_child_nodes() -> void:
 		# do something with the others
 
 
+func _calculate_icon_scale(size: Vector2, max_size: Vector2) -> Vector2:
+	var original_size := size
+	var scale_factor := Vector2.ONE
+	if original_size.x > max_size.x or original_size.y > max_size.y:
+		scale_factor = max_size / original_size
+	
+	return scale_factor
+
+
 func _create_item_icons() -> void:
 	if not _is_ready:
 		return
@@ -838,7 +847,7 @@ func _create_item_icons() -> void:
 			sprite.position = coords[i]
 			sprite.centered = true
 			sprite.texture = item.texture
-			sprite.scale = Vector2(icon_scale, icon_scale)
+			sprite.scale = _calculate_icon_scale(item.texture.get_size(), max_icon_size)
 			sprite.modulate = _get_color("IconModulation")
 			$ItemIcons.add_child(sprite)
 	_item_children_present = true
@@ -853,7 +862,7 @@ func _update_item_icons() -> void:
 	var start_angle := center_angle - _item_angle * n * 0.5 + _item_angle * 0.5
 
 	# a heuristic - hide icons when they tend to outgrow their segment
-	if _item_angle < 0.01 or r * (_item_angle / 2 * PI) < width * icon_scale:
+	if _item_angle < 0.01 or r * (_item_angle / 2 * PI) < width * max_icon_size.angle():
 		$ItemIcons.hide()
 	else:
 		$ItemIcons.show()
@@ -870,7 +879,7 @@ func _update_item_icons() -> void:
 			var sprite: Sprite2D = item_nodes[ni]
 			ni += 1
 			sprite.position = coords[i]
-			sprite.scale = Vector2(icon_scale, icon_scale)
+			sprite.scale = _calculate_icon_scale(item.texture.get_size(), max_icon_size)
 			sprite.modulate = _get_color("IconModulation")
 		i = i + 1
 
