@@ -1,40 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cuqniiohe2b05"]
+[gd_scene load_steps=5 format=3 uid="uid://cuqniiohe2b05"]
 
 [ext_resource type="Script" uid="uid://dmajpyj80syq0" path="res://addons/RadialMenu/Demo/RadialDemo3.gd" id="2"]
-[ext_resource type="FontFile" uid="uid://dx06tle8akogc" path="res://addons/RadialMenu/NotoSans-Regular.ttf" id="4_ffkv6"]
 [ext_resource type="Texture2D" uid="uid://dr2ssjr8a40cx" path="res://addons/RadialMenu/Demo/Rock_02_CGBookcase.jpg" id="5"]
-[ext_resource type="Texture2D" uid="uid://fdtv7sya24cu" path="res://addons/RadialMenu/icons/Close.svg" id="5_c8icn"]
-[ext_resource type="Texture2D" uid="uid://vnd6kg0ikfib" path="res://addons/RadialMenu/icons/Favorites.svg" id="6_k38q6"]
-[ext_resource type="Texture2D" uid="uid://ckcdty11wmc2n" path="res://addons/RadialMenu/icons/InterpLinear.svg" id="7_do3c0"]
 [ext_resource type="Script" uid="uid://ilu8q3n0jy33" path="res://addons/RadialMenu/RadialMenu.gd" id="7_ffkv6"]
 
 [sub_resource type="StyleBoxFlat" id="1"]
 bg_color = Color(0.113725, 0.113725, 0.113725, 1)
-
-[sub_resource type="Theme" id="Theme_v8dkf"]
-RadialMenu/colors/Background = Color(0.9, 0.82125, 0.585, 0.901961)
-RadialMenu/colors/CenterBackground = Color(1, 1, 1, 0.901961)
-RadialMenu/colors/CenterStroke = Color(0.188235, 0.556863, 0.776471, 0.901961)
-RadialMenu/colors/ExpandIconModulation = Color(0, 0, 0, 1)
-RadialMenu/colors/IconModulation = Color(0.416934, 0.226927, 0.153798, 1)
-RadialMenu/colors/RingBackground = Color(0, 0.454902, 0.72549, 0.901961)
-RadialMenu/colors/RingStroke = Color(0.0980392, 0.509804, 0.752941, 0.901961)
-RadialMenu/colors/SelectedBackground = Color(0.564706, 0.835294, 0.996078, 0.901961)
-RadialMenu/colors/SelectedStroke = Color(0.564706, 0.835294, 0.996078, 0.901961)
-RadialMenu/colors/SelectorSegment = Color(0.196078, 0.701961, 1, 0.905882)
-RadialMenu/colors/Stroke = Color(0.54902, 0.54902, 0.54902, 0.541176)
-RadialMenu/colors/TitleDisplay = Color(0.230469, 0.230469, 0.230469, 1)
-RadialMenu/constants/CenterRadius = 0
-RadialMenu/constants/DecoratorRingWidth = 5
-RadialMenu/constants/ItemRingWidth = 10
-RadialMenu/constants/RingStrokeWidth = 1
-RadialMenu/constants/SelectorSegmentWidth = 5
-RadialMenu/constants/StrokeWidth = 1
-RadialMenu/font_sizes/TitleFont = 16
-RadialMenu/fonts/TitleFont = ExtResource("4_ffkv6")
-RadialMenu/icons/Close = ExtResource("5_c8icn")
-RadialMenu/icons/DefaultPlaceholder = ExtResource("6_k38q6")
-RadialMenu/icons/Expand = ExtResource("7_do3c0")
 
 [node name="RadialMenuDemo3" type="PanelContainer"]
 clip_contents = true
@@ -103,13 +74,11 @@ offset_bottom = 300.0
 pivot_offset = Vector2(150, 150)
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme = SubResource("Theme_v8dkf")
 script = ExtResource("7_ffkv6")
 width = 60
 center_radius = 60
 circle_coverage = 1.0
 show_animation = true
-animation_speed_factor = 0.1
 
 [connection signal="canceled" from="Node/RadialMenu" to="." method="_on_radial_menu_canceled"]
 [connection signal="item_selected" from="Node/RadialMenu" to="." method="_on_ArcPopupMenu_item_selected"]
