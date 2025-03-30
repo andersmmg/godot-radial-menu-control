@@ -343,7 +343,7 @@ func set_item_icon(idx: int, texture: Texture2D) -> void:
 
 ## Clear all items from the menu
 func clear_items() -> void:
-	menu_items = []
+	set_items([])
 
 
 ## Set up the gamepad id, axes, and deadzone
@@ -675,6 +675,8 @@ func _get_selected_by_mouse() -> int:
 		if _get_open_submenu()._get_selected_by_mouse() != -1:
 			# we don't change the selection while a submenu has a valid selection
 			return active_submenu_idx
+	if not get_viewport():
+		return -1
 
 	var s := selected
 	var mpos := get_local_mouse_position() - _center_offset
@@ -817,7 +819,7 @@ func _calculate_icon_scale(size: Vector2, max_size: Vector2) -> Vector2:
 	var scale_factor := Vector2.ONE
 	if original_size.x > max_size.x or original_size.y > max_size.y:
 		scale_factor = max_size / original_size
-	
+
 	return scale_factor
 
 
@@ -973,9 +975,9 @@ func _get_texture(name: String) -> Texture2D:
 
 # Clears all items from the ring
 func _clear_items() -> void:
-	var n = $ItemIcons
-	if not n:
+	if not has_node("ItemIcons"):
 		return
+	var n = $ItemIcons
 	for node in n.get_children():
 		n.remove_child(node)
 		node.queue_free()
@@ -1109,11 +1111,12 @@ func _on_submenu_cancelled() -> void:
 	active_submenu_idx = -1
 	queue_redraw()
 
+
 class RadialMenuItem:
 	var texture: Texture2D
 	var title: String
 	var id: Variant
-	
+
 	static func create(texture: Texture2D, title: String, id: Variant) -> RadialMenuItem:
 		var new_item := RadialMenuItem.new()
 		new_item.texture = texture
