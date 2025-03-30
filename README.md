@@ -1,5 +1,8 @@
+
 Radial Menu Control
 ===================
+
+This project is based on [jesuisse/godot-radial-menu-control](https://github.com/jesuisse/godot-radial-menu-control), with modifications to add documentation and strong typing, as well as fixing some issues and missing functionality. Parts of it are compatible with previous installation in projects, but be warned, there are some breaking changes (mainly to variable names).
 
 This code provides a radial menu control node for Godot Engine 4 (also called a "pie menu") with support for submenus:
 
@@ -11,7 +14,7 @@ It supports keyboard, mouse and gamepad input. You can define the basic look of 
 
 You can also change many menu geometry settings, such as how much of a full ring is covered by the menu, the radius and width of the ring/arc via exported properties:
 
-<img src="addons/RadialMenu/doc/ExportedProperties.png">
+<img src="addons/RadialMenu/doc/exported_props.png">
 
 A short demo video of the radial menu control is available at https://youtu.be/uATC5JfqUkI. A live demo ist available at https://www.phar.ch/2024/godot-radial-menu-demo/RadialMenu.html
 
@@ -19,7 +22,7 @@ A short demo video of the radial menu control is available at https://youtu.be/u
 Setup
 -----
 
-There are three alternative ways to set up your radial menu:
+There are two ways to set up your radial menu:
    
    1. Activate the RadialMenu *plugin* in your project settings and then add a radial menu to your scene tree using the new RadialMenu node that should become available with plugin activation.
 
@@ -30,10 +33,7 @@ There are three alternative ways to set up your radial menu:
 	const RadialMenu = preload("path_to/addons/RadialMenu/RadialMenu.gd")
 	...
 	# create a radial menu
-	var menu = RadialMenu.new()    
-
-   3. Instance the provided `RadialMenu.tscn` scene in your own scene tree. The 
-	  scene contains a single Control node that has the `RadialMenu.gd` script attached.
+	var menu = RadialMenu.new()
 
 Note that adding children to the RadialMenu node currently has no effect, but this may change in later versions, so *do not add children to a radial menu* in your scene tree if you want to make sure later versions will still work.
 
@@ -94,120 +94,7 @@ All colors, some size constants such as the width of the decorator ring/arc and 
 
 <img src="addons/RadialMenu/doc/config-naming.svg.png" width="450px">
 
-
-Public Properties
------------------
-
-All the following properties are considered to belong to the public interface; you can acess and change these properties at will. All of these properties except `menu_items` are also exported by the script and can be changed directly in the Godot editor.
-
-	menu_items
-
-A list of dictionaries containing 'texture', 'title' and 'action' keys (at least). You can
-also use the `set_items` method instead.
-
-	radius 
-
-Sets the radius of the menu.
-
-	width
-
-Sets the width of the ring that holds the menu items.
-
-	center_radius
-
-Sets the radius of the center ring. If you set it to 0, the center won't be drawn.
-
-	circle_coverage : float
-
-Determines how much of a full circle the menu covers. Must be a value between 0 and 1, though values below a certain treshold (the exact number varies depending on radius, width etc) don't make sense.
-
-	center_angle : float
-
-Sets the angle where the center of the radial arc is located. Values are in radians. The default is -PI/2, e.g. the arc is centered at 12 o'Clock.
-
-	gap_size
-
-Sets the size of the gaps between the individual ring/arc segments.
-
-	selector_position 
-
-Sets the position of the selector. It's either `Position.off`, `Position.inside` (default), or `Position.outside`.
-
-	decorator_position
-
-Sets the position of the decorator ring. It's either `Position.off`, `Position.inside` (default), or `Position.outside`.
-
-	show_animation : bool
-
-A boolean which controls whether animations are enabled (default) or disabled. 
-
-	animation_speed_factor: float
-
-This changes the speed of the animation. Smaller values get you a faster animation. Ignored if `show_animation` is false.
-
-	outside_selection_factor : float
-
-A float which determines how far beyond the ring the mouse can still select a menu item. The factor is in ring widths, so a value of 0 means the mouse won't select outside of the ring at all, and 1 means the mouse will select up to a full ring width beyond the outer edge of the ring. Defaults to 3.
-
-	icon_scale : float
-
-Factor by which icons are scaled. This is applied to all textures provided via `menu_items`. Defaults to 1.
-
-	show_titles: bool
-	
-Configures the display of titles. Currently, they are shown in the center circle of the menu if there is enough space to display them.
-
-Public Methods
---------------
-
-	set_items(items)
-
-Sets all menu items at once. You can also set the `menu_items` property directly.
-
-	open_menu(center_position: Vector2)
-
-Opens the RadialMenu (e.g. makes it visible at the given position). Do not place the menu yourself and call `show()`; use this method instead.
-
-	add_icon_item(texture : Texture, title: String, id)
-
-Adds an item represented by an icon to the menu. Note: Calling add_icon_item is
-less efficient than setting all items at once via set_items.
-
-	set_item_text(idx: int, title: String)
-
-Sets the text of a single menu item. The item must exist already.
-
-	set_item_id(idx: int, id)
-
-Sets the action of a single menu item. The item must exist already.
-
-	set_item_icon(idx: int, texture: Texture)
-
-Sets the icon of a single menu item. The item must exist already.
-
-	select_next()
-
-Selects the next item in clockwise order.
-
-	select_prev()
-
-Selects the previous item in clockwise order (e.g. the next counterclockwise).
-
-	has_open_submenu()
-
-Returns true if a submenu is active, false if not.
-
-	get_open_submenu()
-
-Returns the submenu object if one is currently active, or null.
-
-	setup_gamepad(deviceid : int, xaxis: int, yaxis: int, deadzone: float)
-
-
-
-Sets the gamepad device id, x-axis and y-axis that controls the radial menu. 
-Deadzone defaults to 0.2 (e.g. 20% of the maximum).
-
+There is detailed documentation in editor for reference. This can be viewed by opening the documentation page for the **RadialMenu** class, or hovering over the exported properties in the inspector.
 
 Input handling details
 ----------------------
