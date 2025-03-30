@@ -4,6 +4,8 @@ Radial Menu Control
 
 This project is based on [jesuisse/godot-radial-menu-control](https://github.com/jesuisse/godot-radial-menu-control), with modifications to add documentation and strong typing, as well as fixing some issues and missing functionality. Parts of it are compatible with previous installation in projects, but be warned, there are some breaking changes (mainly to variable names).
 
+This plugin also requires Godot 4.4+ due to the uid changes, but it could be used on older versions with some modifications.
+
 This code provides a radial menu control node for Godot Engine 4 (also called a "pie menu") with support for submenus:
 
 <img src="addons/RadialMenu/doc/radial_menu_demo3.png">
