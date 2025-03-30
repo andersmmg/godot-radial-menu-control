@@ -16,15 +16,15 @@ Original Github Repository: https://github.com/jesuisse/godot-radial-menu-contro
 ## Signal is sent when an item is selected. Opening a submenu doesn't emit
 ## this signal; if you are interested in that, use the submenu's about_to_popup
 ## signal.
-signal item_selected(id, position)
+signal item_selected(id: Variant, position: Vector3)
 ## Signal is sent when you hover over an item
-signal item_hovered(item)
+signal item_hovered(item: Dictionary)
 ## Signal is sent when the menu is closed without anything being selected
 signal canceled
 ## Signal is sent when the menu is opened. This happens *before* the opening animation starts
-signal menu_opened(menu)
+signal menu_opened(menu: RadialMenu)
 ## Signal is sent when the menu is closed. This happens *before* the closing animation starts
-signal menu_closed(menu)
+signal menu_closed(menu: RadialMenu)
 
 ## Ring position options
 enum Position {
@@ -88,7 +88,7 @@ const Draw = preload("drawing_library.gd")
 @export_range(0.1, 1.0, 0.05) var circle_coverage := 0.65:
 	set = _set_circle_coverage
 
-## The angle where the center of the ring segment will be (if circle_coverage is less than 1.0) 
+## The angle where the center of the ring segment will be (if circle_coverage is less than 1.0)
 ## in radians
 @export_range(0.0, 2 * PI, 0.01745) var center_angle := -PI / 2:
 	set = _set_center_angle
@@ -339,6 +339,11 @@ func set_item_icon(idx: int, texture: Texture2D) -> void:
 		_update_item_icons()
 	else:
 		print_debug("Invalid index {} in set_item_texture" % idx)
+
+
+## Clear all items from the menu
+func clear_items() -> void:
+	menu_items = []
 
 
 ## Set up the gamepad id, axes, and deadzone
