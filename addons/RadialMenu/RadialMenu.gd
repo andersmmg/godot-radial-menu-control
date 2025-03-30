@@ -543,7 +543,7 @@ func _radial_input(event: InputEvent) -> void:
 		return
 
 	if event is InputEventMouseButton:
-		_handle_mouse_buttons(event)
+		_handle_mouse_buttons(event as InputEventMouseButton)
 	else:
 		_handle_actions(event)
 
@@ -749,7 +749,7 @@ func _redraw_if_submenu_selection_changed() -> void:
 	# This is taking care of problems with the title display in the center
 	# when the submenu selection has changed
 	if _has_open_submenu():
-		var sub_sel = _get_open_submenu().selected
+		var sub_sel := _get_open_submenu().selected
 		if sub_sel != _last_selected_submenu_idx:
 			queue_redraw()
 			_last_selected_submenu_idx = sub_sel
@@ -757,7 +757,7 @@ func _redraw_if_submenu_selection_changed() -> void:
 
 # Selects the next item in the menu (clockwise)
 func _select_next() -> void:
-	var n = menu_items.size()
+	var n := menu_items.size()
 	if 2 * PI - n * _item_angle < 0.01 or selected < n - 1:
 		_set_selected_item((selected + 1) % n)
 		_has_left_center = false
@@ -765,7 +765,7 @@ func _select_next() -> void:
 
 # Selects the previous item in the menu (clockwise)
 func _select_prev() -> void:
-	var n = menu_items.size()
+	var n := menu_items.size()
 	if 2 * PI - n * _item_angle < 0.01 or selected > 0:
 		_set_selected_item(int(fposmod(selected - 1, n)))
 		_has_left_center = false
@@ -781,14 +781,14 @@ func _activate_selected() -> void:
 		_signal_id()
 
 
-func _connect_submenu_signals(submenu) -> void:
+func _connect_submenu_signals(submenu: RadialMenu) -> void:
 	submenu.connect("visibility_changed", Callable(submenu, "_on_visibility_changed"))
 	submenu.connect("item_selected", Callable(self, "_on_submenu_item_selected"))
 	submenu.connect("item_hovered", Callable(self, "_on_submenu_item_hovered"))
 	submenu.connect("canceled", Callable(self, "_on_submenu_cancelled"))
 
 
-func _disconnect_submenu_signals(submenu) -> void:
+func _disconnect_submenu_signals(submenu: RadialMenu) -> void:
 	submenu.disconnect("visibility_changed", Callable(submenu, "_on_visibility_changed"))
 	submenu.disconnect("item_selected", Callable(self, "_on_submenu_item_selected"))
 	submenu.disconnect("item_hovered", Callable(self, "_on_submenu_item_hovered"))
