@@ -527,12 +527,11 @@ func _radial_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
+	_redraw_if_submenu_selection_changed()
 	if event is InputEventMouseMotion:
 		_set_selected_item(_get_selected_by_mouse())
-		_redraw_if_submenu_selection_changed()
 	elif event is InputEventJoypadMotion:
 		_set_selected_item(_get_selected_by_joypad())
-		_redraw_if_submenu_selection_changed()
 		return
 
 	if _has_open_submenu():
