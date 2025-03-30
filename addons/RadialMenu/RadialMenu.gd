@@ -621,8 +621,8 @@ func _draw_center_ring():
 
 	if not show_titles or selected == -1:
 		var tex := _get_texture("Close")
-		#if active_submenu_idx != -1:
-		#	tex = BACK_TEXTURE
+		if _has_open_submenu():
+			tex = _get_texture("Back")
 		draw_texture(tex, _center_offset - tex.get_size() / 2, _get_color("IconModulation"))
 
 

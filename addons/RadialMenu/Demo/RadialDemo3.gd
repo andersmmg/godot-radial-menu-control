@@ -24,7 +24,7 @@ func create_submenu(parent_menu):
 	var submenu = RadialMenu.new()
 	# copy some important properties from the parent menu
 	submenu.circle_coverage = 0.45
-	submenu.width = parent_menu.width*0.8
+	submenu.width = parent_menu.width * 0.8
 	submenu.show_animation = parent_menu.show_animation
 	submenu.animation_speed_factor = parent_menu.animation_speed_factor
 	return submenu
@@ -32,27 +32,31 @@ func create_submenu(parent_menu):
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-
 	# Create a few dummy submenus.
 	var submenu1 = create_submenu($Node/RadialMenu)
 	var submenu2 = create_submenu($Node/RadialMenu)
 	var submenu3 = create_submenu($Node/RadialMenu)
 	var submenu4 = create_submenu($Node/RadialMenu)
-	
+
 	var submenu5 = create_submenu(submenu4)
 	submenu4.add_icon_item(SCALE_TEXTURE, "Something else", submenu5)
-	
+
 	var submenu6 = create_submenu(submenu5)
 	submenu5.add_icon_item(POINTS_TEXTURE, "Another", submenu6)
 
 	# Define the main menu's items.
-	$Node/RadialMenu.set_items([
-		{'texture': SCALE_TEXTURE, 'title': "Reset scale", 'id': "action1"},
-		{'texture': TWODEE_TEXTURE, 'title': "Axis Setup", 'id': submenu1},
-		{'texture': POINTS_TEXTURE, 'title': "Dataset Setup", 'id': submenu2},
-		{'texture': GRID_TEXTURE, 'title': "Grid Setup", 'id': submenu3},
-		{'texture': TOOL_TEXTURE, 'title': "Advanced Tools", 'id': submenu4},
-	])
+	(
+		$Node/RadialMenu
+		. set_items(
+			[
+				{"texture": SCALE_TEXTURE, "title": "Reset scale", "id": "action1"},
+				{"texture": TWODEE_TEXTURE, "title": "Axis Setup", "id": submenu1},
+				{"texture": POINTS_TEXTURE, "title": "Dataset Setup", "id": submenu2},
+				{"texture": GRID_TEXTURE, "title": "Grid Setup", "id": submenu3},
+				{"texture": TOOL_TEXTURE, "title": "Advanced Tools", "id": submenu4},
+			]
+		)
+	)
 
 
 func _input(event):
@@ -70,6 +74,7 @@ func _input(event):
 
 func _on_ArcPopupMenu_item_selected(action, _position):
 	$MenuResult.text = str(action) + " selected"
+
 
 func _on_radial_menu_canceled() -> void:
 	$MenuResult.text = "Nothing selected yet"

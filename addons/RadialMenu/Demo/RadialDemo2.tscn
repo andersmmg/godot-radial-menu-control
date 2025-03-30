@@ -1,18 +1,24 @@
 [gd_scene load_steps=4 format=3 uid="uid://8gio8223puqr"]
 
-[ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://iopwhmejcr8b" path="res://addons/RadialMenu/RadialMenu.tscn" id="2_royl4"]
+[ext_resource type="Script" uid="uid://yugyrh1ewf53" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="2"]
+[ext_resource type="Script" uid="uid://ilu8q3n0jy33" path="res://addons/RadialMenu/RadialMenu.gd" id="3_bvrjl"]
 [ext_resource type="Theme" uid="uid://bwbpbc6ab46x3" path="res://addons/RadialMenu/light_default_theme.tres" id="3_icj7k"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("2")
 
-[node name="RadialMenu" parent="." instance=ExtResource("2_royl4")]
+[node name="RadialMenu" type="Control" parent="."]
+visible = false
 custom_minimum_size = Vector2(239.511, 226.708)
+layout_mode = 3
+anchors_preset = 0
 offset_right = 239.511
 offset_bottom = 226.708
 pivot_offset = Vector2(120, 106.708)
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme = ExtResource("3_icj7k")
+script = ExtResource("3_bvrjl")
 radius = 120
 width = 60
 center_radius = 35
@@ -20,3 +26,4 @@ selector_position = 2
 decorator_ring_position = 2
 circle_coverage = 0.66
 center_angle = 2.1638
+show_animation = true
