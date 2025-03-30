@@ -16,7 +16,7 @@ You can also change many menu geometry settings, such as how much of a full ring
 
 <img src="addons/RadialMenu/doc/exported_props.png">
 
-A short demo video of the radial menu control is available at https://youtu.be/uATC5JfqUkI. A live demo ist available at https://www.phar.ch/2024/godot-radial-menu-demo/RadialMenu.html
+A short demo video of the radial menu control is available at https://youtu.be/uATC5JfqUkI. A live demo is available at https://www.phar.ch/2024/godot-radial-menu-demo/RadialMenu.html
 
 
 Setup
@@ -64,7 +64,7 @@ Titles are shown in the center circle if there is enough space to display them a
 Signals
 -------
 
-A radial menu control node emits three signals:
+A radial menu control node emits five signals:
 
    1. `item_selected(id, position)`
 
